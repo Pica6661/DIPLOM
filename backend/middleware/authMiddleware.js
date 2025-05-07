@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Auth failed' });
+  } catch (error) {
+    return res.status(401).json({ message: 'Ошибка аутентификации' });
   }
 };

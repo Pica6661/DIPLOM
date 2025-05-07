@@ -2,6 +2,8 @@ const db = require('../config/db');
 
 class ContactMessage {
   static async create({ name, email, phone, message }) {
+    console.log('Сохранение в БД:', { name, email, phone, message });
+    
     const { rows } = await db.query(
       `INSERT INTO public.contact_message 
        (name, email, phone, message) 
@@ -9,6 +11,7 @@ class ContactMessage {
        RETURNING id, name, email, phone, message, created_at`,
       [name, email, phone, message]
     );
+    
     return rows[0];
   }
 

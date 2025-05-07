@@ -1016,3 +1016,70 @@ header nav ul li a:hover {
   padding: 0.7rem 1.5rem;
   font-size: 1rem;
 }
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-item {
+  display: block;
+  margin-bottom: 8px;
+}/* Кастомный чекбокс */
+.custom-checkbox {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+/* При наведении */
+.custom-checkbox:hover .checkmark {
+  background-color: #ccc;
+}
+
+/* При отмеченном чекбоксе */
+.custom-checkbox input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* Эффект внутри чекбокса при отметке */
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  background: transparent;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #007bff;
+}

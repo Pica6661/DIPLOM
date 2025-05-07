@@ -1,35 +1,46 @@
 // src/components/AuthModal.jsx
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { loginUser, registerUser } from '../services/authService';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', name: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
+    try {
       if (isLogin) {
-        // Имитация успешного входа
-        localStorage.setItem('user', JSON.stringify({ email: formData.email }));
-        onClose(); // Закрываем окно после входа
+        const res = await loginUser(formData);
+        if (res?.user) {
+          login(res.user); // Сохраняем в контексте
+          onClose(); // Закрываем модальное окно
+          navigate('/profile'); // Переходим в профиль
+        }
       } else {
-        // Переключаемся на форму входа после регистрации
+        await registerUser(formData);
         setIsLogin(true);
-        setFormData({ ...formData, password: '' });
+        setFormData({ email: formData.email, password: '', name: '' });
       }
-
+    } catch (err) {
+      setError('Ошибка при авторизации. Попробуйте ещё раз.');
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   if (!isOpen) return null;
@@ -54,6 +65,7 @@ const AuthModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               required={!isLogin}
               disabled={loading}
+              autoComplete="name"
             />
           )}
           <input
@@ -64,6 +76,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             onChange={handleChange}
             required
             disabled={loading}
+            autoComplete="email"
           />
           <input
             type="password"
@@ -73,6 +86,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             onChange={handleChange}
             required
             disabled={loading}
+            autoComplete={isLogin ? 'current-password' : 'new-password'}
           />
           <button type="submit" disabled={loading}>
             {loading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}

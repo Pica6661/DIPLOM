@@ -2,8 +2,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   return (
@@ -16,18 +20,23 @@ export default function Header() {
           <li><Link to="/about">О нас</Link></li>
           <li><Link to="/contacts">Контакты</Link></li>
           <li><Link to="/cart">Корзина</Link></li>
+
+          {/* Показываем профиль только если пользователь вошёл */}
+          {user && (
+            <li><button onClick={() => navigate('/profile')}>Профиль</button></li>
+          )}
         </ul>
       </nav>
 
       <div className="auth-buttons">
-        <button onClick={() => setIsAuthModalOpen(true)}>Войти</button>
+        {user ? (
+          <button onClick={logout}>Выйти</button>
+        ) : (
+          <button onClick={() => setIsAuthModalOpen(true)}>Войти</button>
+        )}
       </div>
 
-      {/* Модальное окно авторизации */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </header>
   );
 }

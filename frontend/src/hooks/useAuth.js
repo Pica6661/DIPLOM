@@ -10,31 +10,31 @@ export const useAuth = () => {
   const [user, setUser] = useState(loadUserFromLocalStorage());
   const [loading, setLoading] = useState(true);
 
-  // Подписка на событие storage
+  // Подписываемся на события localStorage
   useEffect(() => {
-    const updateUser = () => {
+    const handleStorageChange = () => {
       const currentUser = loadUserFromLocalStorage();
-      if (currentUser !== user) {
+      if (JSON.stringify(currentUser) !== JSON.stringify(user)) {
         setUser(currentUser);
       }
     };
 
-    window.addEventListener('storage', updateUser);
+    window.addEventListener('storage', handleStorageChange);
     setTimeout(() => setLoading(false), 500);
 
-    return () => window.removeEventListener('storage', updateUser);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-    window.dispatchEvent(new StorageEvent('storage')); // Уведомляем другие компоненты
+    window.dispatchEvent(new Event('storage')); // Ручное уведомление о изменении
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    window.dispatchEvent(new StorageEvent('storage'));
+    window.dispatchEvent(new Event('storage'));
   };
 
   return { user, loading, login, logout };

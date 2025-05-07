@@ -1,3 +1,4 @@
+// src/hooks/useAuth.js
 import { useState, useEffect } from 'react';
 
 const loadUserFromLocalStorage = () => {
@@ -10,10 +11,7 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Имитируем проверку токена или данные из localStorage
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    setTimeout(() => setLoading(false), 500);
   }, []);
 
   const login = (userData) => {

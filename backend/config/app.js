@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -21,9 +22,6 @@ app.use(express.json());
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/cart', cartRoutes);
 
 module.exports = app;
-// backend/app.js
-const cartRoutes = require('./routes/cartRoutes');
-
-app.use('/api/cart', cartRoutes); // Добавляем маршруты корзиныS

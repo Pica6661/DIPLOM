@@ -23,9 +23,3 @@ app.listen(PORT, () => {
 });
 const cors = require('cors');
 
-// После создания app:
-app.use(cors({
-  origin: 'http://localhost:3000', // Укажите ваш фронтенд-адрес
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));

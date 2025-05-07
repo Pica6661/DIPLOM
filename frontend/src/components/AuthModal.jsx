@@ -1,28 +1,17 @@
 // src/components/AuthModal.jsx
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { loginUser, registerUser } from '../services/authService'; // Импортируем отдельные функции
+import { loginUser, registerUser } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: ''
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -32,22 +21,13 @@ const AuthModal = ({ isOpen, onClose }) => {
 
     try {
       if (isLogin) {
-        // Вход
-        const res = await loginUser({
-          email: formData.email,
-          password: formData.password
-        });
-
+        const res = await loginUser(formData);
         if (res?.user) {
-          login(res.user); // Сохраняем пользователя в контексте
-          onClose(); // Закрываем модальное окно
-          navigate('/profile'); // Перенаправляем в профиль
+          onClose();
         }
       } else {
-        // Регистрация
         await registerUser(formData);
-        setIsLogin(true); // Переключаемся на форму входа
-        setFormData({ ...formData, password: '' }); // Очищаем пароль
+        setIsLogin(true);
       }
     } catch (err) {
       setError('Ошибка при авторизации. Попробуйте ещё раз.');
@@ -55,8 +35,6 @@ const AuthModal = ({ isOpen, onClose }) => {
       setLoading(false);
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -69,18 +47,6 @@ const AuthModal = ({ isOpen, onClose }) => {
         {error && <p className="error">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <input
-              type="text"
-              name="name"
-              placeholder="Имя"
-              value={formData.name}
-              onChange={handleChange}
-              required={!isLogin}
-              disabled={loading}
-              autoComplete="name"
-            />
-          )}
           <input
             type="email"
             name="email"
@@ -116,7 +82,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
 AuthModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
 };
 
 export default AuthModal;

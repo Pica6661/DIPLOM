@@ -1,17 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { addToCart, fetchCart, removeFromCart, emptyCart } = require('../controllers/cartController');
+const cartController = require('../controllers/cartController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// Получить корзину пользователя
-router.get('/cart/:userId', fetchCart);
-
-// Добавить товар в корзину
-router.post('/cart/add', addToCart);
-
-// Удалить товар из корзины
-router.post('/cart/remove', removeFromCart);
-
-// Очистить корзину
-router.post('/cart/clear', emptyCart);
+router.get('/', authMiddleware, cartController.getCart);
+router.post('/', authMiddleware, cartController.addToCart);
+router.delete('/:id', authMiddleware, cartController.removeFromCart);
 
 module.exports = router;

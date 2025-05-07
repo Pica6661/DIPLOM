@@ -1,48 +1,20 @@
-const { getCartByUserId, addItemToCart, removeItemFromCart, clearCart } = require('../models/cartModel');
-const { useAuth } = require('../../hooks/useAuth'); // или используй JWT
+const Cart = require('../models/Cart');
 
-const fetchCart = async (req, res) => {
-  const { userId } = req.params;
-
+exports.getCart = async (req, res) => {
   try {
-    const cartItems = await getCartByUserId(userId);
-    res.json(cartItems);
+    const cart = await Cart.findOne({ user: req.user.id }).populate('items.product');
+    res.json(cart);
   } catch (err) {
-    res.status(500).json({ error: 'Ошибка загрузки корзины' });
+    res.status(500).json({ message: err.message });
   }
 };
 
-const addToCart = async (req, res) => {
-  const { userId, productId, quantity } = req.body;
-
+exports.addToCart = async (req, res) => {
   try {
-    const item = await addItemToCart(userId, productId, quantity);
-    res.status(201).json(item);
+    const { productId, quantity } = req.body;
+    // Логика добавления в корзину
+    res.status(201).json(updatedCart);
   } catch (err) {
-    res.status(500).json({ error: 'Ошибка добавления в корзину' });
+    res.status(400).json({ message: err.message });
   }
 };
-
-const removeFromCart = async (req, res) => {
-  const { userId, productId } = req.body;
-
-  try {
-    await removeItemFromCart(userId, productId);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка удаления из корзины' });
-  }
-};
-
-const emptyCart = async (req, res) => {
-  const { userId } = req.body;
-
-  try {
-    await clearCart(userId);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: 'Ошибка очистки корзины' });
-  }
-};
-
-module.exports = { fetchCart, addToCart, removeFromCart, emptyCart };

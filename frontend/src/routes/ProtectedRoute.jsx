@@ -1,13 +1,14 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth"; // Выходим из /routes в /src
+// src/routes/ProtectedRoute.jsx
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>; // или ваш лоадер
-  }
+  if (loading) return <div>Загрузка...</div>;
 
-  return user ? children : <Navigate to="/signin" replace />;
+  if (!user) return <Navigate to="/login" replace />;
+
+  return children;
 }

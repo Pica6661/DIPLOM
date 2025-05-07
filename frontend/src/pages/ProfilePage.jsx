@@ -1,14 +1,12 @@
-// src/ProfilePage.jsx
+// src/pages/ProfilePage.jsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from "../hooks/useAuth"; // Выходим из /pages в /src
+import { useAuth } from '../hooks/useAuth';
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   if (!user) {
-    return <p>Для просмотра профиля необходимо войти.</p>;
+    return <p>Доступ запрещён. Войдите в аккаунт.</p>;
   }
 
   return (
@@ -17,12 +15,7 @@ export default function ProfilePage() {
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Имя:</strong> {user.name || 'Не указано'}</p>
 
-      <button onClick={() => {
-        logout();
-        navigate('/');
-      }}>
-        Выйти
-      </button>
+      <button onClick={logout}>Выйти</button>
     </div>
   );
 }

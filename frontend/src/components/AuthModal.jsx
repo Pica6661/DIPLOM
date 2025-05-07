@@ -1,26 +1,28 @@
 // src/components/AuthModal.jsx
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-// Импортируем отдельные функции из authService
-import { loginUser, registerUser } from '../services/authService';
+import { loginUser, registerUser } from '../services/authService'; // Импортируем отдельные функции
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ email: '', password: '', name: '' });
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: ''
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
-
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
-    setError('');
-  };
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -30,23 +32,25 @@ const AuthModal = ({ isOpen, onClose }) => {
 
     try {
       if (isLogin) {
-        // Вход пользователя
+        // Вход
         const res = await loginUser({
           email: formData.email,
-          password: formData.password,
+          password: formData.password
         });
 
-        if (res && res.user) {
-          login(res.user);
-          onClose();
+        if (res?.user) {
+          login(res.user); // Сохраняем пользователя в контексте
+          onClose(); // Закрываем модальное окно
+          navigate('/profile'); // Перенаправляем в профиль
         }
       } else {
-        // Регистрация пользователя
+        // Регистрация
         await registerUser(formData);
-        toggleForm(); // Переключаемся на форму входа после успешной регистрации
+        setIsLogin(true); // Переключаемся на форму входа
+        setFormData({ ...formData, password: '' }); // Очищаем пароль
       }
     } catch (err) {
-      setError('Произошла ошибка при авторизации. Попробуйте ещё раз.');
+      setError('Ошибка при авторизации. Попробуйте ещё раз.');
     } finally {
       setLoading(false);
     }
@@ -72,7 +76,7 @@ const AuthModal = ({ isOpen, onClose }) => {
               placeholder="Имя"
               value={formData.name}
               onChange={handleChange}
-              required
+              required={!isLogin}
               disabled={loading}
               autoComplete="name"
             />
@@ -102,7 +106,7 @@ const AuthModal = ({ isOpen, onClose }) => {
           </button>
         </form>
 
-        <p className="toggle-link" onClick={toggleForm}>
+        <p className="toggle-link" onClick={() => setIsLogin(!isLogin)}>
           {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
         </p>
       </div>
@@ -112,7 +116,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
 AuthModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default AuthModal;

@@ -1,7 +1,7 @@
 // src/ProfilePage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from "../hooks/useAuth"; // Выходим из /pages в /src
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();

@@ -1,22 +1,22 @@
-require('dotenv').config();
+// Импорты
 const express = require('express');
-const app = express();
-const cors = require('cors');
-const db = require('./config/db');
-const appConfig = require('./config/app');
+const cors = require('cors'); // ✅ Только один раз
 
-// Подключение к БД
-db.connect();
+// Роуты
+const productRoutes = require('./routes/productRoutes');
+
+// Создание сервера
+const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Включение CORS
+app.use(express.json()); // Парсинг JSON из тела запроса
 
-// Маршруты
-app.use('/api', appConfig.routes());
+// Роуты
+app.use('/api/products', productRoutes);
 
 // Запуск сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

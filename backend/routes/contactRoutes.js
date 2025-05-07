@@ -1,8 +1,8 @@
-// backend/routes/contactRoutes.js
 const express = require('express');
 const router = express.Router();
-const { submitMessage } = require('../controllers/contactController');
+const contactController = require('../controllers/contactController');
 
-router.post('/contact', submitMessage);
+router.post('/', contactController.createMessage);
+router.get('/', contactController.getMessages);
 
 module.exports = router;

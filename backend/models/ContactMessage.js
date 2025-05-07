@@ -6,7 +6,7 @@ class ContactMessage {
       `INSERT INTO public.contact_message 
        (name, email, phone, message) 
        VALUES ($1, $2, $3, $4) 
-       RETURNING *`,
+       RETURNING id, name, email, phone, message, created_at`,
       [name, email, phone, message]
     );
     return rows[0];
@@ -14,7 +14,8 @@ class ContactMessage {
 
   static async getAll() {
     const { rows } = await db.query(
-      `SELECT * FROM public.contact_message 
+      `SELECT id, name, email, phone, message, created_at 
+       FROM public.contact_message 
        ORDER BY created_at DESC`
     );
     return rows;

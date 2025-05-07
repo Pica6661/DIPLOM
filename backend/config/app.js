@@ -16,3 +16,6 @@ module.exports = {
     return router;
   }
 };
+const contactRoutes = require('../routes/contactRoutes');
+// ...
+router.use('/contact', contactRoutes);

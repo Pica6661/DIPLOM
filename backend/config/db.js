@@ -1,4 +1,3 @@
-// backend/config/db.js
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -10,4 +9,12 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-module.exports = pool;
+// Проверка подключения
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ Подключение к PostgreSQL успешно'))
+  .catch(err => console.error('❌ Ошибка подключения к PostgreSQL:', err));
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+  pool
+};

@@ -1,6 +1,6 @@
 // src/pages/ProfilePage.jsx
 import React from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();

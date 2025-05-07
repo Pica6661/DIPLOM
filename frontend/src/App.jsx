@@ -1,8 +1,8 @@
-// App.jsx
+// src/App.jsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-
-// Страницы
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import About from './pages/About';
@@ -10,14 +10,8 @@ import Contacts from './pages/Contacts';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Product from './pages/Product';
+import ProtectedRoute from './routes/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
-
-// Компоненты
-import Header from './components/Header';
-import Footer from './components/Footer';
-
-// Роуты
-import ProtectedRoute from './routes/ProtectedRoute'; // ✅ Теперь с правильным путём
 
 function App() {
   return (
@@ -27,13 +21,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
-          <Route path="/product" element={<Product />} />
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/about" element={<About />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
 
-          {/* Защищённый маршрут */}
+          {/* Защищённый маршрут для профиля */}
           <Route
             path="/profile"
             element={

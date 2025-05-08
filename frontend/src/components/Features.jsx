@@ -3,17 +3,17 @@ import React from 'react';
 function Features() {
   const features = [
     {
-      icon: "/images/icon-quality.svg",
+      icon: "/images/icon-quality.jpg",
       title: "Высокое качество",
       description: "Только проверенные бренды и надежные материалы."
     },
     {
-      icon: "/images/icon-delivery.svg",
+      icon: "/images/icon-delivery.jpg",
       title: "Быстрая доставка",
       description: "Доставляем товары по всей стране за 1-3 дня."
     },
     {
-      icon: "/images/icon-support.svg",
+      icon: "/images/icon-support.jpg",
       title: "Профессиональная поддержка",
       description: "Наши специалисты помогут с выбором и установкой."
     }
